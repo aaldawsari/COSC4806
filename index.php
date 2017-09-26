@@ -7,6 +7,6 @@
 <p><label> Password: </label><input type="password" name="password" /></p>
 <p class="center"><input value="Login" type="submit" class="center" /></p>
 </form>
--</div>
--</body>
+
+
 </html>
