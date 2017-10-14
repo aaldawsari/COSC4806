@@ -1,30 +1,40 @@
 <?php
-
-$users["Abdullah Aldawsari"] = "A2b2b2b2";
-$users["Hamad"] = "123456";
-$users["Ali"] = "12";
 session_start();
 	
+$host = 'localhost';
+$user = 'root';
+$pass='';
+$dbname='COSC';
 
 
-	foreach($users as $name => $password) {
-  		if($name == $_POST["username"] && $password == $_POST["password"]) {
-    		
-			$_SESSION['usr']=$_POST["username"];
+
+
+
+
+try{
+ $DBH = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+}catch(PDOException $e) {
+    echo $e->getMessage();
+}
+
+$stmt = $DBH->prepare(" SELECT * FROM users WHERE username = '{$_POST['username']}' ");
+$result = $stmt->execute();
+$usrs = $stmt->fetch();
+echo $usrs[1];
+
+if (isset($usrs[0])) {
+    if (password_verify($_POST['password'], $usrs[1])) {
+    	$_SESSION['usr']=$_POST["username"];
 			$_SESSION['pass']=$_POST["password"];
-			header("Location: loginSuccess.php");
-			die();
-
-  		}
-  	}
-  		if (isset($_SESSION['logAttempts']))
-			{
-				$_SESSION['logAttempts']++;
-		}else{
-				$_SESSION['logAttempts'] = 1;
-		}
-	 	header("Location: loginFailed.php");
-	
-
+        header("Location: loginSuccess.php");
+        die();
+    } else {
+        header("Location: loginFailed.php?err=password is invalid!");
+    die();
+    }
+} else {
+    header("Location: loginFailed.php?err=username is invalid!!");
+    die();
+}
 
 ?>

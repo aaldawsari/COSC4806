@@ -15,7 +15,7 @@ header("Location: loginSuccess.php");
 <p class="center"><input value="Login" type="submit" class="center"/></p>
 </form>
 <form method="POST" action=''>
-<input type="submit" name="rep1"  value="Report">
+<input type="submit" name="rep1"  value="Report"></br>
 <a href = "account.php"> Create an account!</a>
 </form>
 <?php 
