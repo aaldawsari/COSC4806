@@ -5,10 +5,8 @@ class User {
     public $username="";
     public $password="";
     public $auth = false;
-    public $attempts=0;
-    public $lockedUntil=0;
     public function __construct() {
-        
+
     }
 
     public function authenticate() {
@@ -17,13 +15,48 @@ class User {
          * $this->auth = true;
          */
 
+        if($this->isLocked()==true){
+            //locked, do nothing
+        }elseif($this->isLocked()==false){
+            $this->Userlogin();
+        }
 
-        if($this->lockedUntil >= time()){
-            //locked
-        }else{
+    }
+    public function isLocked(){
+
+        $db = db_connect();
 
 
-		$db = db_connect();
+        //checking if user attempted 3 times in last hour minutes
+
+
+        $beforeOneHour = time() - (60*60);
+        $statement = $db->prepare("select * from regLogs
+                                WHERE username = :name AND stat = '0' AND date > :date ORDER by date DESC ;
+                ");
+        $statement->bindValue(':name', $this->username);
+        $statement->bindValue(':date', $beforeOneHour);
+        $statement->execute();
+        $numAttempts = $statement->fetch();
+
+            if($statement->rowCount()>=3){
+                //checking time left
+                $currTime = time();
+                $lockTime = $numAttempts['date'];
+                $lockTime = $lockTime + (60);
+                if($lockTime > $currTime){
+                    return true;
+                }else{
+                    return false;
+                }
+
+            }else{
+                return false;
+            }
+
+    }
+    public function Userlogin(){
+        $db = db_connect();
         $statement = $db->prepare("select * from users
                                 WHERE username = :name;
                 ");
@@ -33,36 +66,45 @@ class User {
 
         if(isset($usrs[0])) {
             if (password_verify($this->password, $usrs[1])) {
-                $_SESSION['usr']=$this->username;
-                $_SESSION['pass']=$this->password;
-                $this->auth=true;
-                $_SESSION['attempts']=0;
-                $statement = $db->prepare("INSERT INTO regLogs (date, username, stat, logType)
-                                values(:currdate, :username, :stat, :type);
-                ");
-                $statement->bindValue(':currdate', date('Y-m-d H:i:s'));
-                $statement->bindValue(':username', $this->username);
-                $statement->bindValue(':stat', 1);
-                $statement->bindValue(':type', "login");
-                $statement->execute();
+                $_SESSION['usr'] = $this->username;
+                $_SESSION['pass'] = $this->password;
+                $this->auth = true;
+                $this->regAttempt(true);
+
             }else{
-                $this->attempt();
+                $_SESSION['usr'] = $this->username;
+                $_SESSION['pass'] = $this->password;
+                $this->regAttempt(false);
             }
         }else{
-            $this->attempt();
+            $_SESSION['usr'] = $this->username;
+            $_SESSION['pass'] = $this->password;
+            $this->regAttempt(false);
         }
-       }
     }
-	public function attempt(){
 
-            if($this->attempts>=3){
-                $this->lockedUntil= (time() + 60);
-                $_SESSION['lockTime'] = $this->lockedUntil;
-            } else{
-                $this->attempts++;
-                $_SESSION['attempts'] = $this->attempts;;
-            }
+    public function regAttempt($isValid){
+        $db = db_connect();
+        if($isValid==true){
+            $statement = $db->prepare("INSERT INTO regLogs (date, username, stat, logType)
+                                values(:currdate, :username, :stat, :type);
+                ");
+            $statement->bindValue(':currdate', time());
+            $statement->bindValue(':username', $this->username);
+            $statement->bindValue(':stat', 1);
+            $statement->bindValue(':type', "login");
+            $statement->execute();
 
+        }else{
+            $statement = $db->prepare("INSERT INTO regLogs (date, username, stat, logType)
+                                values(:currdate, :username, :stat, :type);
+                ");
+            $statement->bindValue(':currdate', time());
+            $statement->bindValue(':username', $this->username);
+            $statement->bindValue(':stat', 0);
+            $statement->bindValue(':type', "login");
+            $statement->execute();
+        }
     }
 	public function register ($username, $password) {
 
