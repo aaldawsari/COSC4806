@@ -15,7 +15,7 @@ class Remind extends Controller {
 			die;
 		}
 		
-		$this->view('home/index', [
+		$this->view('reminder/index', [
 		'list' => $list
 		] );
     }
@@ -23,10 +23,8 @@ class Remind extends Controller {
 	public function update($id) {
 		$r = $this->model('Reminders');
         $item = $r->get_reminder($id);
-        if(isset($update)){
-            $sub=$_POST['sub'];
-            $des=$_POST['des'];
-            $r->update($sub,$des);
+        if(isset($_POST['sub']) && !empty($_POST['sub'])){
+            $r->update($_POST['sub'],$_POST['des'], $id);
         }
 		
 		$this->view('reminder/update', ['item' => $item] );
@@ -42,12 +40,12 @@ class Remind extends Controller {
 	public function create() {
         $r = $this->model('Reminders');
         $submit=$_POST['add'];
-        if(isset($submit)){
+        if(isset($_POST['sub']) && !empty($_POST['sub'])){
             $sub=$_POST['sub'];
             $des=$_POST['des'];
             $r->add($sub,$des);
         }
 
-        $this->view('home/login');
+        $this->view('reminder/add');
     }
 }

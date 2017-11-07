@@ -15,7 +15,6 @@ if (isset($_SESSION['auth']) != 1) {
                 <div>
                     <a href="/home">COSC</a>
                 </div>
-
                 <div>
 
                     <a href="/logout">Logout</a>

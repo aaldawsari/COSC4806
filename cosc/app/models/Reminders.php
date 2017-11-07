@@ -10,7 +10,7 @@ class Reminders {
 		$db = db_connect();
         $statement = $db->prepare("SELECT * FROM notes
                                 WHERE username = :username AND deleted = 0;");
-        $statement->bindValue(':username', $_SESSION['username']);
+        $statement->bindValue(':username', $_SESSION['usr']);
 		
         $statement->execute();
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -20,33 +20,36 @@ class Reminders {
 	public function get_reminder ($id) {
 		$db = db_connect();
         $statement = $db->prepare("SELECT * FROM notes WHERE
-                                id = :id;");
+                                Id = :id;");
         $statement->bindValue(':id', $id);
 		
         $statement->execute();
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 		return $rows;
 	}
-    public function add ($id) {
+    public function add ($sub, $des) {
         $db = db_connect();
-        $statement = $db->prepare("INSERT INTO notes(subject,description) VALUES (:subject,:description)");
-        $statement->bindValue(':id', $id);
-        $statement->bindValue(':subject', subject);
-        $statement->bindValue(':description', description);
+        $statement = $db->prepare("INSERT INTO notes(Subject, description, username) VALUES (:subject, :description, :username);");
+
+        $statement->bindValue(':subject', $sub);
+        $statement->bindValue(':description', $des);
+        $statement->bindValue(':username', $_SESSION['usr']);
         $statement->execute();
     }
-    public function update ($id) {
+    public function update ($sub, $des, $id)
+    {
         $db = db_connect();
-        $statement = $db->prepare("UPDATE  notes SET subject=:subject,description=:description");
-        $statement->bindValue(':subject', subject);
-        $statement->bindValue(':description', description);
-        $statement->execute();
+        $insert=$db->prepare("UPDATE notes SET Subject= :subject , description= :description WHERE Id= :id; ");
+        $insert->bindValue(':subject',$sub);
+        $insert->bindValue(':id',$id);
+        $insert->bindValue(':description',$des);
+        $insert->execute();
     }
 	
 	public function removeItem($id) {
 		$db = db_connect();
 
-        $statement = $db->prepare("UPDATE notes SET deleted = 1 WHERE id = :id");
+        $statement = $db->prepare("UPDATE notes SET deleted = 1 WHERE Id = :id;");
         $statement->bindValue(':id', $id);
         $statement->execute();
 

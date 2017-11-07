@@ -3,12 +3,12 @@
 <h2>Update Reminder</h2>
 
 
-<form>
+<form action="<?'../remind/update/='.$data['item'][0]['Id']?>" method="post">
 
 Subject:
-<input type="text" value="<?=$data['item'][0]['subject']?>">
+<input type="text" name="sub" value="<?=$data['item'][0]['Subject']?>">
 Description:
-<input type="text" value="<?=$data['item'][0]['description']?>">
+<input type="text" name="des" value="<?=$data['item'][0]['description']?>">
 
 <button type="submit"> Update </button>
 

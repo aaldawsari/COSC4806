@@ -6,8 +6,7 @@ if (isset($_SESSION['auth']) == 1) {
 }
 ?>
 
-<!DOCTYPE html>
+
     <link href= "/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <title>COSC 4806</title>
-</head>
 <body>
