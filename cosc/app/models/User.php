@@ -69,7 +69,19 @@ class User {
                 $_SESSION['usr'] = $this->username;
                 $_SESSION['pass'] = $this->password;
                 $this->auth = true;
+
+
                 $this->regAttempt(true);
+                $statment = $db ->prepare(" SELECT * FROM regLogs ORDER BY `date` DESC;
+                                ");
+                $date = time() -(60*60*24);
+                $statment->bindValue(':date', $date);
+                try { $statment->execute();}
+                catch(PDOException $e){echo $e->getMessage();}
+                $login = $statment->fetchAll();
+                $_SESSION['lastLogin'] = $login[1][0];
+
+
 
             }else{
                 $_SESSION['usr'] = $this->username;

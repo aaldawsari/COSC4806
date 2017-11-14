@@ -1,30 +1,30 @@
 <?php require_once '../app/views/templates/headerPublic.php' ?>
-<div>
+<div class="container">
     <div>
                 <h1>You are not logged in</h1>
 
 
     </div>
 
-    <div class="row">
+    <div>
 
             <form action="/login/index" method="post">
 
-					<div>
+					<div class="form-group">
 					  <label>Username</label>
 					  <div>
-						<input type="text" name="username" placeholder="Username">
+						<input type="text" class="form-control" name="username" placeholder="Username">
 					  </div>
 					</div>
 					<div>
 					  <label for="password">Password</label>
 					  <div>
-						<input type="password" name="password" placeholder="Password">
+						<input type="password" class="form-control" name="password" placeholder="Password">
 					  </div>
 					</div>
 					<div>
 
-						<button type="submit">Submit</button>
+						<button type="submit" class="btn btn-primary">login</button>
 
 					</div>
 
@@ -33,4 +33,4 @@
 
     </div>
 
-    <?php require_once '../app/views/templates/footer.php' ?>
+    <?php require_once '../app/views/templates/footerPublic.php' ?>

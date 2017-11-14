@@ -1,6 +1,6 @@
 <footer>
     <div>
-            <p>Abdullah Aldossari <?php echo $_SESSION['attempts']; echo $_SESSION['lockTime'] ?></p>
+            <p>Abdullah Aldossari <?php echo 'your last Login was on' . date("l jS \of F Y h:i:s A",$_SESSION['lastLogin']); echo $_SESSION['lockTime'] ?></p>
 
     </div>
 </footer>

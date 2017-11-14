@@ -2,6 +2,20 @@
 
 class Login extends Controller {
     public function index() {
+
+        $dbh = db_connect();
+        $statment = $dbh ->prepare(" SELECT COUNT(*) FROM regLogs WHERE date > :date ORDER BY `date` DESC;
+                                ");
+        $date = time() -(60*60*24);
+        $statment->bindValue(':date', $date);
+        try { $statment->execute();}
+        catch(PDOException $e){echo $e->getMessage();}
+
+        $logins = $statment->fetchColumn();
+        $_SESSION['todayLogins'] = $logins;
+
+        sleep(2);
+
         $user = $this->model('User');
 
         if (isset($_POST['username'])) {
