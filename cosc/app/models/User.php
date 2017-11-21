@@ -68,6 +68,7 @@ class User {
             if (password_verify($this->password, $usrs[1])) {
                 $_SESSION['usr'] = $this->username;
                 $_SESSION['pass'] = $this->password;
+                $_SESSION['isAdmin'] = $usrs[2];
                 $this->auth = true;
 
 
