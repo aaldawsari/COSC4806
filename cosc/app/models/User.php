@@ -69,6 +69,7 @@ class User {
                 $_SESSION['usr'] = $this->username;
                 $_SESSION['pass'] = $this->password;
                 $_SESSION['isAdmin'] = $usrs[2];
+                $_SESSION['completeProfile'] = $usrs[3];
                 $this->auth = true;
 
 

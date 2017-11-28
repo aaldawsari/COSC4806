@@ -1,5 +1,9 @@
 <?php require_once '../app/views/templates/header.php' ?>
-
+<?php
+if($_SESSION['completeProfile'] ==0){
+    header('Location: /Profile/index');
+}
+?>
 <div>
 
     <div>

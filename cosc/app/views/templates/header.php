@@ -2,6 +2,9 @@
 if (isset($_SESSION['auth']) != 1) {
     header('Location: /home');
 }
+if(isset($_SESSION['completeProfile'])){
+
+}
 ?>
 
     <head>
@@ -23,6 +26,9 @@ if (isset($_SESSION['auth']) != 1) {
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/remind/index">remainders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Profile/index">profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">logout</a>

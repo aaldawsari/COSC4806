@@ -27,14 +27,19 @@ class Reminders {
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 		return $rows;
 	}
-    public function add ($sub, $des) {
-        $db = db_connect();
-        $statement = $db->prepare("INSERT INTO notes(Subject, description, username) VALUES (:subject, :description, :username);");
+    public function add ($sub, $des)
+    {
+        if ($_SESSION['completeProfile'] == 1) {
 
-        $statement->bindValue(':subject', $sub);
-        $statement->bindValue(':description', $des);
-        $statement->bindValue(':username', $_SESSION['usr']);
-        $statement->execute();
+
+            $db = db_connect();
+            $statement = $db->prepare("INSERT INTO notes(Subject, description, username) VALUES (:subject, :description, :username);");
+
+            $statement->bindValue(':subject', $sub);
+            $statement->bindValue(':description', $des);
+            $statement->bindValue(':username', $_SESSION['usr']);
+            $statement->execute();
+        }
     }
     public function update ($sub, $des, $id)
     {
